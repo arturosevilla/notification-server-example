@@ -1,8 +1,11 @@
+#!/usr/bin/env python
+
 from session import RedisSessionInterface
 from flask import Flask, render_template, request, session, url_for, \
                   redirect, jsonify
 from uuid import uuid4
 from chat import get_conversation, send_message as do_chat, is_valid_chatroom
+from config import get_config
 
 app = Flask(__name__)
 
@@ -25,6 +28,7 @@ def login():
 @app.route('/user/logout')
 def logout():
     session.pop('user', None)
+    app.session_interface.logout(app)
     return redirect(url_for('index'))
 
 @app.route('/chat/<chatroom>')
@@ -34,7 +38,13 @@ def chat(chatroom=None):
     log = get_conversation(chatroom)
     if log is None:
         return redirect(url_for('index'))
-    return render_template('chat.html', messages=log, chatroom=(chatroom or 'intercomunidades'))
+    name = session['user']['name']
+    return render_template(
+        'chat.html',
+        messages=log,
+        chatroom=(chatroom or 'intercomunidades'),
+        user_name=name
+    )
 
 @app.route('/chat/<chatroom>/message', methods=['POST'])
 def send_message(chatroom=None):
@@ -49,6 +59,16 @@ def send_message(chatroom=None):
     return jsonify(success=True)
 
 if __name__ == '__main__':
-    app.session_interface = RedisSessionInterface()
+    import sys
+    if len(sys.argv) == 1:
+        print('Required configuration file!')
+        sys.exit(1)
+    config = get_config(sys.argv[1])
+    if config is None:
+        print('File not found or incorrect format for INI file')
+        sys.exit(1)
+        
+    app.session_cookie_name = config['cookie_name']
+    app.session_interface = RedisSessionInterface(secret=config['secret'])
     app.run(debug=True)
 

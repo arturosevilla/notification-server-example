@@ -15,7 +15,7 @@ def get_conversation(chatroom):
     storage = get_redis()
     return [
         json.loads(m)
-        for m in storage.lrange('notifexample:' + chatroom, 0, -1)
+        for m in storage.lrange('notifexample:conv:' + chatroom, 0, -1)
     ]
 
 def send_message(chatroom, user_id, name, message):
@@ -26,7 +26,7 @@ def send_message(chatroom, user_id, name, message):
     created_on = now.strftime('%Y-%m-%d %H:%M:%S')
     # if chatroom doesn't exist create it!
     storage.rpush(
-        'notifexample:' + chatroom,
+        'notifexample:conv:' + chatroom,
         json.dumps({
             'author': name,
             'userID': user_id,

@@ -1,9 +1,9 @@
 from redis import Redis
 import pickle
-from uuid import uuid4
 from datetime import timedelta
 from werkzeug.datastructures import CallbackDict
 from flask.sessions import SessionInterface, SessionMixin
+from sid import generate_secure_id, generate_id, get_secure_id
 
 class RedisSession(CallbackDict, SessionMixin):
 
@@ -20,14 +20,27 @@ class RedisSessionInterface(SessionInterface):
     serializer = pickle
     session_class = RedisSession
 
-    def __init__(self, redis=None, prefix='session:'):
+    def __init__(
+        self,
+        redis=None,
+        secret=None,
+        prefix='notifexample:session:'
+    ):
         if redis is None:
             redis = Redis()
         self.redis = redis
+        self.secret = secret
         self.prefix = prefix
 
     def generate_sid(self):
-        return str(uuid4())
+        if self.secret is None:
+            return generate_id()
+        return generate_secure_id(self.secret)
+
+    def get_session_id(self, request_id):
+        if self.secret is None:
+            return request_id
+        return get_secure_id(self.secret, request_id)
 
     def get_redis_expiration_time(self, app, session):
         if session.permanent:
@@ -44,6 +57,12 @@ class RedisSessionInterface(SessionInterface):
             data = self.serializer.loads(val)
             return self.session_class(data, sid=sid)
         return self.session_class(sid=sid, new=True)
+
+    def logout(self, app, request):
+        sid = self.get_session_id(request.cookies.get(app.session_cookie_name))
+        if sid is None:
+            return
+        self.redis.delete(self.prefix + sid)
 
     def save_session(self, app, session, response):
         domain = self.get_cookie_domain(app)

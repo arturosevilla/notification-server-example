@@ -1,8 +1,5 @@
 <html>
     <head>
-        <script src="http://localhost:5886/socket.io/socket.io.js" type="text/javascript"></script>
-        <script src="/static/js/jquery.js" type="text/javascript"></script>
-        <script src="/static/js/chat.js" type="text/javascript"></script>
         <link rel="stylesheet" href="/static/css/chat.css" />
     </head>
     <body>
@@ -20,5 +17,12 @@
         </div>
         <textarea placeholder="type some message" name="message"></textarea>
         <input type="button" value="Manda el mensaje">
+        <script src="http://localhost:5886/socket.io/socket.io.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            var userName = '{{ user_name }}';
+        </script>
+        <script src="/static/js/jquery.js" type="text/javascript"></script>
+        <script src="/static/js/chat.js" type="text/javascript"></script>
+
     </body>
 </html>
