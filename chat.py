@@ -19,7 +19,6 @@ def get_conversation(chatroom):
         for m in storage.lrange('notifexample:' + chatroom, 0, -1)
     ]
 
-
 def send_message(chatroom, user_id, name, message):
     if '<script>' in message:
         message += '-- Not this time DefConFags'

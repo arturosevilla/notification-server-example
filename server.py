@@ -33,7 +33,7 @@ def chat(chatroom=None):
     log = get_conversation(chatroom)
     if log is None:
         return redirect(url_for('index'))
-    return render_template('chat.html')
+    return render_template('chat.html', messages=log)
 
 @app.route('/chat/<chatroom>/message', methods=['POST'])
 def send_message(chatroom=None):
@@ -44,7 +44,7 @@ def send_message(chatroom=None):
     if not is_valid_chatroom(chatroom) or len(message) == 0 or \
        user_id is None or user_name is None:
         return jsonify(success=False)
-    do_chat(user_id, user_name, message)
+    do_chat(chatroom, user_id, user_name, message)
     return jsonify(success=True)
 
 if __name__ == '__main__':
