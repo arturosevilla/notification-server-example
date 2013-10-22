@@ -13,13 +13,14 @@ def index():
 @app.route('/user/login', methods=['POST'])
 def login():
     username = request.form.get('username', '').strip()
+    chatroom = request.form.get('chatroom', '').strip()
     if len(username) == 0:
         return redirect(url_for('index'))
     session['user'] = {
         'user.id': str(uuid4()),
         'name': username
     }
-    return redirect(url_for('chat'))
+    return redirect(url_for('chat', chatroom=(chatroom or 'intercomunidades')))
 
 @app.route('/user/logout')
 def logout():
@@ -33,7 +34,7 @@ def chat(chatroom=None):
     log = get_conversation(chatroom)
     if log is None:
         return redirect(url_for('index'))
-    return render_template('chat.html', messages=log)
+    return render_template('chat.html', messages=log, chatroom=(chatroom or 'intercomunidades'))
 
 @app.route('/chat/<chatroom>/message', methods=['POST'])
 def send_message(chatroom=None):
