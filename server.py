@@ -26,7 +26,7 @@ def logout():
     session.pop('user', None)
     return redirect(url_for('index'))
 
-@app.route('/chat/{chatroom}')
+@app.route('/chat/<chatroom>')
 def chat(chatroom=None):
     if not is_valid_chatroom(chatroom) or session.get('user') is None:
         return redirect(url_for('index'))
@@ -35,7 +35,7 @@ def chat(chatroom=None):
         return redirect(url_for('index'))
     return render_template('chat.html')
 
-@app.route('/chat/{chatroom}/message', methods=['POST'])
+@app.route('/chat/<chatroom>/message', methods=['POST'])
 def send_message(chatroom=None):
     message = request.json.get('message', '').strip()
     user = session.get('user', {})
