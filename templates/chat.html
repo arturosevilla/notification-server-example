@@ -1,6 +1,15 @@
 <html>
     <head>
-        <scrip src="/socket.io/socket.io.js" type="text/javascript"></scrip>
+        <script src="http://localhost:5886/socket.io/socket.io.js" type="text/javascript"></script>
+        <script src="/static/js/jquery.js" type="text/javascript"></script>
+        <script src="/static/js/chat.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="/static/css/chat.css" />
     </head>
-    <body></body>
+    <body>
+        <h1>The Chat Room</h1>
+        <h3>messages for {{ chatroom }}:</h3>
+        <div class="messages"></div>
+        <textarea placeholder="type some message" name="message"></textarea>
+        <input type="button" value="Submit your message... or not">
+    </body>
 </html>
