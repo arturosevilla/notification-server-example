@@ -1,1 +1,9 @@
 Just an example of how to use http://github.com/arturosevilla/notification-server
+
+Recomendations on creating a virtualenv + nodeenv
+
+$ virtualenv notifexample
+$ pip install nodeenv
+$ nodeenv -p --with-npm
+$ python setup.py develop # to install the dependencies
+
