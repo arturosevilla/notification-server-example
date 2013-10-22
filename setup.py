@@ -13,7 +13,8 @@ setup(
     author_email='arturo@ckluster.com',
     url='http://www.ckluster.com/',
     install_requires=[
-        'Flask==0.10.1'
+        'Flask==0.10.1',
+        'redis==2.4.13'
     ],
     packages=find_packages(exclude=['ez_setup']),
     include_package_data=True,
