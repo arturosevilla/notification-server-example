@@ -1,19 +1,57 @@
 body {
     text-align: center;
 }
+.logout-container {
+    text-align: right;
+    height: 0;
+}
+
+.logout-container a {
+    text-decoration: none;
+    margin: 10px 10px 0 0;
+}
+
+h1 {
+    font-size: 3em;
+}
 .messages, textarea {
     width: 50%;
 }
 .messages {
-    min-height: 400px;
+    height: 400px;
     border: 1px solid #C7C7C7;
     margin: auto;
     margin-bottom: 20px;
+    text-align: left;
+    padding: 5px;
+    overflow: overlay;
+}
+.message {
+    margin-bottom: 5px;
+}
+
+.message .author {
+    font-weight: bold;
+}
+
+.message p {
+    white-space: pre-line;
+    margin: 0;
+}
+.message .text {
+    display: inline-block;
+    margin-left: 5px;
+    vertical-align: top;
+}
+
+.message .createdon {
+    font-size: 12px;
 }
 
 textarea {
     resize: none;
     padding: 5px;
+    height: 100px;
 }
 
 input[type="button"] {

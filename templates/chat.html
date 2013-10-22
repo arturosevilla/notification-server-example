@@ -6,10 +6,19 @@
         <link rel="stylesheet" href="/static/css/chat.css" />
     </head>
     <body>
-        <h1>The Chat Room</h1>
-        <h3>messages for {{ chatroom }}:</h3>
-        <div class="messages"></div>
+        <div class="logout-container">
+            <a href="/user/logout">salir</a>
+        </div>
+        <h1>{{ chatroom }}</h1>
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message">
+                    <p><span class="author">{{ message.author }}:</span><span class="text">{{ message.message}}</span></p>
+                    <div class="createdon">{{ message.createdOn }}</div>
+                </div>
+            {% endfor %}
+        </div>
         <textarea placeholder="type some message" name="message"></textarea>
-        <input type="button" value="Submit your message... or not">
+        <input type="button" value="Manda el mensaje">
     </body>
 </html>
