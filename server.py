@@ -70,5 +70,5 @@ if __name__ == '__main__':
         
     app.session_cookie_name = config['cookie_name']
     app.session_interface = RedisSessionInterface(secret=config['secret'])
-    app.run(debug=True)
+    app.run(debug=config['debug'])
 
