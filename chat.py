@@ -12,7 +12,6 @@ def get_redis():
 def get_conversation(chatroom):
     if chatroom is None or len(chatroom) == 0:
         return None
-    # if chatroom doesn't exist create it!
     storage = get_redis()
     return [
         json.loads(m)
@@ -25,6 +24,7 @@ def send_message(chatroom, user_id, name, message):
     storage = get_redis()
     now = datetime.now()
     created_on = now.strftime('%Y-%m-%d %H:%M:%S')
+    # if chatroom doesn't exist create it!
     storage.rpush(
         'notifexample:' + chatroom,
         json.dumps({
