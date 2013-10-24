@@ -4,7 +4,8 @@ from session import RedisSessionInterface
 from flask import Flask, render_template, request, session, url_for, \
                   redirect, jsonify
 from uuid import uuid4
-from chat import get_conversation, send_message as do_chat, is_valid_chatroom
+from chat import get_and_register_in_conversation, send_message as do_chat, \
+                 is_valid_chatroom
 from config import get_config
 
 app = Flask(__name__)
@@ -33,9 +34,11 @@ def logout():
 
 @app.route('/chat/<chatroom>')
 def chat(chatroom=None):
-    if not is_valid_chatroom(chatroom) or session.get('user') is None:
+    user = session.get('user', {})
+    user_id = user.get('user.id')
+    if not is_valid_chatroom(chatroom) or user_id is None:
         return redirect(url_for('index'))
-    log = get_conversation(chatroom)
+    log = get_and_register_in_conversation(chatroom, user_id)
     if log is None:
         return redirect(url_for('index'))
     name = session['user']['name']
