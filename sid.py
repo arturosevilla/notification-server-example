@@ -7,8 +7,7 @@ from hashlib import sha1
 def generate_id():
     return str(uuid4()).replace('-', '')
 
-def generate_secure_id(secret):
-    sid = generate_id()
+def encode_id(secret, sid):
     sig = hmac.new(secret, sid.encode('utf-8'), sha1).hexdigest()
     return '%s%s' % (sig, sid)
 

@@ -38,6 +38,6 @@ def send_message(chatroom, user_id, name, message, config):
     }
     members = storage.smembers('notifexample:convmembers:' + chatroom)
     for member in members:
-        send_notification(config['router'], message, member)
+        send_notification(config['notification.queue.router'], message, member)
     storage.rpush('notifexample:conv:' + chatroom, json.dumps(message))
 

@@ -9,6 +9,7 @@ from chat import get_and_register_in_conversation, send_message as do_chat, \
 from config import get_config
 
 app = Flask(__name__)
+config = None
 
 @app.route('/')
 def index():
@@ -20,7 +21,7 @@ def login():
     chatroom = request.form.get('chatroom', '').strip()
     if len(username) == 0:
         return redirect(url_for('index'))
-    session['user'] = {
+    session['repoze.who.tkt'] = {
         'user.id': str(uuid4()),
         'name': username
     }
@@ -34,14 +35,14 @@ def logout():
 
 @app.route('/chat/<chatroom>')
 def chat(chatroom=None):
-    user = session.get('user', {})
+    user = session.get('repoze.who.tkt', {})
     user_id = user.get('user.id')
     if not is_valid_chatroom(chatroom) or user_id is None:
         return redirect(url_for('index'))
     log = get_and_register_in_conversation(chatroom, user_id)
     if log is None:
         return redirect(url_for('index'))
-    name = session['user']['name']
+    name = session['repoze.who.tkt']['name']
     return render_template(
         'chat.html',
         messages=log,
@@ -52,13 +53,13 @@ def chat(chatroom=None):
 @app.route('/chat/<chatroom>/message', methods=['POST'])
 def send_message(chatroom=None):
     message = request.json.get('message', '').strip()
-    user = session.get('user', {})
+    user = session.get('repoze.who.tkt', {})
     user_id = user.get('user.id')
     user_name = user.get('name')
     if not is_valid_chatroom(chatroom) or len(message) == 0 or \
        user_id is None or user_name is None:
         return jsonify(success=False)
-    do_chat(chatroom, user_id, user_name, message)
+    do_chat(chatroom, user_id, user_name, message, config)
     return jsonify(success=True)
 
 if __name__ == '__main__':
@@ -72,6 +73,8 @@ if __name__ == '__main__':
         sys.exit(1)
         
     app.session_cookie_name = config['cookie_name']
-    app.session_interface = RedisSessionInterface(secret=config['secret'])
+    app.session_interface = RedisSessionInterface(
+        secret=config['beaker.session.secret']
+    )
     app.run(debug=config['debug'])
 
