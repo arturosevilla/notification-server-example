@@ -20,7 +20,7 @@ def queue_process(config):
 def worker_process(config, port):
     def _init(config):
         start_single_worker(
-            config['notification.queue.router'],
+            config['notification.queue.pusher'],
             config['notification.queue.worker.host'],
             port,
             config['notification.queue.worker.notifier.req']

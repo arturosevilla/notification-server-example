@@ -18,6 +18,7 @@ def create_zmq_socket(context, type_):
     return sock
 
 def log_debug_instance(instance, msg):
+    print msg
     logger.debug('[' + instance.__class__.__name__ + '] ' + msg)
 
 def send_notification(router_address, notification, recipient):
@@ -233,6 +234,8 @@ class QueueWorker(object):
             'Sending notification to the publisher for user: ' + user_id
         )
         
+        message_to_send = json.dumps(message_to_send)
+        user_id = str(user_id)
         if more:
             self.publisher.send(user_id + '|' + message_to_send, zmq.SNDMORE)
         else:
