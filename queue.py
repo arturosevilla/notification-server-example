@@ -27,8 +27,8 @@ def send_notification(router_address, notification, recipient):
         router.connect(router_address)
         router.send(
             json.dumps({
-                notification: notification,
-                recipient: recipient
+                "notification": notification,
+                "recipient": recipient
             }).encode('utf-8')
         )
     except:

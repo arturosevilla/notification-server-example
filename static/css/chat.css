@@ -24,7 +24,7 @@ h1 {
     margin-bottom: 20px;
     text-align: left;
     padding: 5px;
-    overflow: overlay;
+    overflow: scroll;
 }
 .message {
     margin-bottom: 5px;

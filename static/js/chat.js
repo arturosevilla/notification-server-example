@@ -13,7 +13,7 @@ $(function() {
                     "message": message
                 }),
                 processData: false,
-                success: function(posted) {
+                complete: function(posted) {
                     scrollToBottom();
                 },
                 contentType: "application/json",
@@ -45,6 +45,4 @@ $(function() {
         console.log('data');
         renderMessage(data);
     });
-    
-    scrollToBottom();
 });
