@@ -14,6 +14,11 @@ $(function() {
                 }),
                 processData: false,
                 complete: function(posted) {
+                    renderMessage({
+                        message: message,
+                        author: userName,
+                        createdOn: moment().format('YYYY-MM-DD hh:mm:ss')
+                    });
                     scrollToBottom();
                 },
                 contentType: "application/json",
@@ -22,7 +27,17 @@ $(function() {
         },
         renderMessage = function(message) {
             console.log('rendering message');
-            console.log(message);
+            var messageItem = $('<div class="message">'
+                    + '<p><span class="author"></span><span class="text"></span></p>'
+                    + '<div class="createdon"></div>'
+                + '</div>');
+            messageItem.find('.author')[0].innerText = message.author;
+            messageItem.find('.author')[0].textContent = message.author;
+            messageItem.find('.text')[0].innerText = message.message;
+            messageItem.find('.text')[0].textContent = message.message;
+            messageItem.find('.createdon')[0].innerText = message.createdOn;
+            messageItem.find('.createdon')[0].textContent = message.createdOn;
+            messages.append(messageItem);
             scrollToBottom();
         },
         scrollToBottom  = function() {
@@ -43,6 +58,6 @@ $(function() {
     messagesSocket.on('notifexample', function(data) {
         console.log('notification received');
         console.log('data');
-        renderMessage(data);
+        renderMessage(data.notification);
     });
 });

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import re
 from session import RedisSessionInterface
 from flask import Flask, render_template, request, session, url_for, \
                   redirect, jsonify
@@ -30,7 +31,7 @@ def login():
 @app.route('/user/logout')
 def logout():
     session.pop('user', None)
-    app.session_interface.logout(app)
+    app.session_interface.logout(app, request)
     return redirect(url_for('index'))
 
 @app.route('/chat/<chatroom>')
@@ -62,6 +63,8 @@ def send_message(chatroom=None):
     do_chat(chatroom, user_id, user_name, message, config)
     return jsonify(success=True)
 
+def is_valid_username(username):
+    return re.match('[A-Za-z_\\d]+$', username) is not None
 if __name__ == '__main__':
     import sys
     if len(sys.argv) == 1:
